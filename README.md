@@ -141,7 +141,7 @@ Click **Save** to apply. The widget resizes and updates immediately.
 | `GT` | GPU Temperature | °C | GPU core temperature |
 | `GM` | GPU Memory | MB | GPU memory in use |
 | `GW` | GPU Power | W | GPU power draw |
-| `Net` | Network Up + Down | B/s · KB/s · MB/s | Combined across selected adapters |
+| `Up/Dn` | Network Up + Down | B/s · KB/s · MB/s | Combined across selected adapters |
 | `Dsk` | Disk Read + Write | B/s · KB/s · MB/s | Selected disk throughput |
 
 ### Status Indicators
