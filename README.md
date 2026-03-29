@@ -142,7 +142,7 @@ Click **Save** to apply. The widget resizes and updates immediately.
 | `GM` | GPU Memory | MB | GPU memory in use |
 | `GW` | GPU Power | W | GPU power draw |
 | `Up/Dn` | Network Up + Down | B/s · KB/s · MB/s | Combined across selected adapters |
-| `Dsk` | Disk Read + Write | B/s · KB/s · MB/s | Selected disk throughput |
+| `DkR/DkW` | Disk Read + Write | B/s · KB/s · MB/s | Selected disk throughput |
 
 ### Status Indicators
 
