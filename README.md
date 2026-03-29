@@ -201,19 +201,6 @@ For full build documentation, architecture details, and contributing guidelines 
 
 ---
 
-## Roadmap
-
-Planned features include:
-
-- **v1.2** — Auto-start with Windows, LHM auto-launch, connection status indicator, configurable poll interval, tooltip on hover
-- **v1.3** — Configurable text colour and font size, high/low value threshold alerts, custom labels, Windows 11 centred taskbar support
-- **v1.4** — GPU clock speed, CPU fan RPM, additional DIMM slots, battery percentage, multi-disk aggregate
-- **v2.0** — ARM64 native build, redesigned Settings window, multiple widget instances, display profiles, plugin sensor sources
-
-See [`ROADMAP.md`](SysBar/ROADMAP.md) for the full backlog and prioritisation notes.
-
----
-
 ## Privacy
 
 SysBar does not collect, transmit, or store any personal data. It makes no outbound network connections. All sensor data is fetched from LibreHardwareMonitor running locally on the same machine via loopback (`127.0.0.1`).
