@@ -1,0 +1,114 @@
+############################################
+# Visual Studio 2022 / MSBuild
+############################################
+
+# User-specific files
+*.vcxproj.user
+*.vcxproj.filters.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# VS workspace
+.vs/
+
+############################################
+# Build outputs
+############################################
+
+# Default output folders
+Debug/
+Release/
+x64/
+x86/
+out/
+build/
+
+# CMake (if ever used later)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+
+############################################
+# Intermediate / compiler artifacts
+############################################
+
+# Object + intermediate
+*.obj
+*.iobj
+*.ipdb
+
+# Program database / debug
+*.pdb
+*.ilk
+
+# Libraries / compiled outputs
+*.lib
+*.exp
+*.dll
+*.exe
+
+# Logs
+*.log
+
+############################################
+# Precompiled headers
+############################################
+
+*.pch
+
+############################################
+# DirectX / Shader compilation
+############################################
+
+# Compiled shader blobs
+*.cso
+*.fxo
+
+# Temporary shader outputs
+*.hlsl.obj
+*.hlsl.hpp
+
+############################################
+# Resource compiler
+############################################
+
+*.aps
+
+############################################
+# IntelliSense / browsing
+############################################
+
+ipch/
+*.opendb
+*.VC.db
+
+############################################
+# NuGet (only if introduced later)
+############################################
+
+packages/
+*.nupkg
+
+############################################
+# OS-specific junk
+############################################
+
+Thumbs.db
+.DS_Store
+
+############################################
+# Archive / distribution artifacts
+############################################
+
+*.zip
+*.7z
+*.rar
+
+############################################
+# Optional: test outputs / temp
+############################################
+
+*.tmp
+*.temp
