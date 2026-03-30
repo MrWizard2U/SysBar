@@ -86,7 +86,7 @@ SysBar reads sensor data from **LibreHardwareMonitor (LHM)**, which must be runn
 
 ### Direct download
 
-1. Download `SysBar-1.1.4-x64.msix` from the [Releases page](https://github.com/MutantWizard/SysBar/releases)
+1. Download `SysBar-1.1.4-x64.msix` from the [Releases page](https://github.com/MrWizard2U/SysBar/releases/tag/v1.1.4)
 2. Double-click the `.msix` file and click **Install**
 3. Launch from Start Menu
 
