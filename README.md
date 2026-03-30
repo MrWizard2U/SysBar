@@ -204,7 +204,7 @@ All values are capped at 4 characters. Speed values scale automatically:
 
 All DirectX components (`D3D11`, `DXGI`, `D2D1`, `DWrite`, `DirectComposition`) are inbox on Windows 10+. No redistribution required. The only external runtime requirement is LibreHardwareMonitor.
 
-For full build documentation, architecture details, and contributing guidelines see [`DEVELOPER.md`](SysBar/DEVELOPER.md).
+For full build documentation, architecture details, and contributing guidelines see [`DEVELOPER.md`](https://github.com/MrWizard2U/SysBar/blob/main/DEVELOPER.md).
 
 ---
 
