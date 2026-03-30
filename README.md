@@ -21,7 +21,7 @@ SysBar is a lightweight, transparent taskbar widget that displays real-time hard
 |---|---|
 | **Website** | [mrwizard2u.github.io](https://mrwizard2u.github.io/) |
 | **Privacy Policy** | [mrwizard2u.github.io/privacy.html](https://mrwizard2u.github.io/privacy.html) |
-| **License** | [mrwizard2u.github.io/license](https://mrwizard2u.github.io/license) |
+| **License** | [mrwizard2u.github.io/license.html](https://mrwizard2u.github.io/license) |
 | ☕ **Support the Project** | [mrwizard2u.github.io/donate.html](https://mrwizard2u.github.io/donate.html) |
 
 ---
