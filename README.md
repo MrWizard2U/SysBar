@@ -8,10 +8,8 @@ SysBar is a lightweight, transparent taskbar widget that displays real-time hard
 
 ### Main Window
 ![Widget](preview/sysbar_sysbar.png)
-
-### Settings
+### Menu
 ![Menu](preview/sysbar_menu.png)
-
 ### Settings
 ![Settings](preview/sysbar_settings.png)
 
