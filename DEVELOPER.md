@@ -82,7 +82,6 @@ SysBar/
 ├── SysBar.vcxproj.filters  # Visual Studio filter groups
 ├── README.md             # End-user documentation
 ├── DEVELOPER.md          # This file
-├── ROADMAP.md            # Planned features
 └── LICENSE               # Licence text
 ```
 
