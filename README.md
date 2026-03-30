@@ -4,7 +4,16 @@
 
 SysBar is a lightweight, transparent taskbar widget that displays real-time hardware sensor data directly alongside your system clock. No overlay windows, no floating panels — just clean, always-visible stats that feel native to Windows.
 
-![SysBar Widget Preview](docs/preview.png)
+## SysBar Preview
+
+### Main Window
+![Widget](preview/sysbar_sysbar.png)
+
+### Settings
+![Menu](preview/sysbar_menu.png)
+
+### Settings
+![Settings](preview/sysbar_settings.png)
 
 ---
 
