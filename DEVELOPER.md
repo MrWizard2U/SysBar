@@ -1,7 +1,7 @@
 # SysBar — Developer Documentation
 
 **Author:** Mutant Wizard  
-**Version:** 1.1.4  
+**Version:** 1.1.5 
 **Platform:** Windows 10 1809+ x64  
 **Stack:** Win32 + DirectComposition + D2D1.1 + DWrite + D3D11  
 
