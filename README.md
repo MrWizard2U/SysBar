@@ -60,7 +60,7 @@ SysBar reads sensor data from **LibreHardwareMonitor (LHM)**, which must be runn
 
 ### Install LibreHardwareMonitor
 
-1. Download from <a href="https://librehardwaremonitor.net/" target="_blank" rel="noopener noreferrer">Libre Hardware Monitor</a> or the [GitHub releases page](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/releases)
+1. Download from [Libre Hardware Monitor](https://librehardwaremonitor.net/) or the [GitHub releases page](https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/releases)
 2. Extract to any folder (e.g. `C:\Tools\LibreHardwareMonitor\`)
 3. Run `LibreHardwareMonitor.exe` **as Administrator** — right-click → Run as administrator
    - Administrator rights are required for CPU power, some GPU sensors, and DIMM temperatures
