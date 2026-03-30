@@ -20,9 +20,7 @@ int ComputeWidgetWidth(State* s)
     if (cols < MIN_COLS) cols = MIN_COLS;
     if (cols > MAX_COLS) cols = MAX_COLS;
 
-    // CRITICAL FIX: Scale column width strictly by the monitor's DPI setting.
-    // Previously, this used the taskbar height which artificially inflated the gap
-    // on Windows 11 (which uses a 48px base height vs Win10's 40px base height).
+    // Scale column width strictly by the monitor's DPI setting.
     UINT dpi = 96;
     HWND tray = FindWindowW(L"Shell_TrayWnd", nullptr);
     if (tray)
@@ -98,19 +96,14 @@ void RepositionWidget(State* s)
     int dh = std::abs((cr.bottom - cr.top) - targetH);
 
     bool posChanged = (dx > 1 || dy > 1 || dw > 1 || dh > 1);
-    bool isTopmost = (GetWindowLongW(s->hwnd, GWL_EXSTYLE) & WS_EX_TOPMOST) != 0;
-    bool rectEmpty = IsRectEmpty(&s->appbar.abd.rc);
 
-    if (posChanged || !isTopmost || rectEmpty)
+    // FIX: Only physically move the window if its position genuinely drifted.
+    // Removed !isTopmost and SHAppBarMessage(ABM_SETPOS) entirely.
+    // DWM manages owned Z-orders natively; fighting it causes Shell/Input deadlocks.
+    if (posChanged)
     {
         SetWindowPos(s->hwnd, nullptr,
             x, y, targetW, targetH,
             SWP_NOACTIVATE | SWP_NOZORDER | SWP_SHOWWINDOW);
-
-        if (s->appbar.registered)
-        {
-            s->appbar.abd.rc = { x, y, x + targetW, y + targetH };
-            SHAppBarMessage(ABM_SETPOS, &s->appbar.abd);
-        }
     }
 }

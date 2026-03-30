@@ -78,7 +78,7 @@ static void RegisterDialogClass(const wchar_t* className,
 // ─────────────────────────────────────────────────────────────────────────────
 static const wchar_t* ABOUT_TEXT =
 L"SysBar \u2014 Real-Time Hardware Monitor\r\n"
-L"Version 1.1.3 \u2014 Windows 10 1809+ | x64\r\n"
+L"Version 1.1.5 \u2014 Windows 10 1809+ | x64\r\n"
 L"Author: Mutant Wizard "
 L"(<a href=\"https://mrwizard2u.github.io\">mrwizard2u.github.io</a>)\r\n\r\n"
 L"A lightweight, transparent taskbar widget that displays real-time "
@@ -174,9 +174,10 @@ void OpenLicense()
 
 void OpenTechSupport()
 {
-    ShellExecuteW(nullptr, L"open",
-        L"mailto:sendtowizzard@gmail.com?subject=SysBar%20Tech%20Support",
-        nullptr, nullptr, SW_SHOWNORMAL);
+    wchar_t url[256];
+    wcscpy_s(url, SITE_BASE);
+    wcscat_s(url, L"/tech-support.html");
+    ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL);
 }
 
 void OpenDonationPage()

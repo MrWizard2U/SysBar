@@ -240,8 +240,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ i
     wc.hbrBackground = nullptr;
     RegisterClassExW(&wc);
 
-    // CRITICAL FIX: Assert WS_EX_TOPMOST at creation so it doesn't need to be 
-    // dynamically asserted by the 5-second background drift guard.
+    // Assert WS_EX_TOPMOST at creation so it doesn't need to be 
+    // dynamically asserted by the background drift guard.
     s->hwnd = CreateWindowExW(
         WS_EX_TOOLWINDOW |
         WS_EX_NOACTIVATE |
@@ -270,19 +270,11 @@ int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ i
 
     std::thread sensorThread(SensorThreadProc, s, g_shutdownEvent);
 
+    // FIX: Cleaned up thread message loop to prevent redundant broadcast intercepts 
+    // that were bleeding across into child windows.
     MSG msg{};
     while (GetMessageW(&msg, nullptr, 0, 0))
     {
-        if (msg.message == s->wmTaskbarCreated)
-        {
-            tray = FindWindowW(L"Shell_TrayWnd", nullptr);
-            if (tray) SetWindowLongPtrW(s->hwnd, GWLP_HWNDPARENT, (LONG_PTR)tray);
-
-            AppBarUnregister(s);
-            AppBarRegister(s);
-            if (!s->isMenuOpen) RepositionWidget(s);
-            continue;
-        }
         TranslateMessage(&msg);
         DispatchMessageW(&msg);
     }
