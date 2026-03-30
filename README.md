@@ -235,7 +235,7 @@ This software is provided under a custom MIT-based licence. You are free to use,
 - All redistributions must credit the original author: *"Original software by Mutant Wizard (https://mrwizard2u.github.io)"*
 - Modified versions must be clearly marked as changed.
 
-See [`License`](License) for the full licence text.
+See [License](https://mrwizard2u.github.io/license) for the full licence text.
 
 ---
 
