@@ -233,7 +233,7 @@ This software is provided under a custom MIT-based licence. You are free to use,
 
 - The software in its **original unmodified form** may not be sold or distributed as a standalone commercial product without prior written permission from the author.
 - All distributed copies must include this licence and the original copyright notice.
-- All redistributions must credit the original author: ([Original software by Mutant Wizard: https://mrwizard2u.github.io](https://mrwizard2u.github.io))
+- All redistributions must credit the original author: "([Original software by Mutant Wizard: https://mrwizard2u.github.io](https://mrwizard2u.github.io))"
 - Modified versions must be clearly marked as changed.
 
 See [License](https://mrwizard2u.github.io/license) for the full licence text.
