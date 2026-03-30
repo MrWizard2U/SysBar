@@ -1,7 +1,7 @@
 # SysBar — Developer Documentation
 
 **Author:** Mutant Wizard  
-**Version:** 1.1.5 
+**Version:** 1.1.5
 **Platform:** Windows 10 1809+ x64  
 **Stack:** Win32 + DirectComposition + D2D1.1 + DWrite + D3D11  
 
@@ -81,8 +81,7 @@ SysBar/
 ├── json.hpp              # nlohmann/json single-header library (MIT licence)
 ├── SysBar.vcxproj.filters  # Visual Studio filter groups
 ├── README.md             # End-user documentation
-├── DEVELOPER.md          # This file
-└── LICENSE               # Licence text
+└── DEVELOPER.md          # This file
 ```
 
 ### Visual Studio filter groups
@@ -190,8 +189,11 @@ NIC throughput sensor paths contain a GUID that differs per machine. Discovery e
 
 ## Changelog
 
-### 1.1.4 — Current release
+### 1.1.5 — Current release
+**Bug fixe**
+- Fixed: Resolved an edge-case issue that could disrupt keyboard input/operation under certain conditions.
 
+### 1.1.4
 **Bug fixes & Optimisations**
 - Fixed context menu freeze / unresponsive right-clicks caused by taskbar Z-order corruption during periodic drift-guard repositioning.
 - Fixed "focus stealing" bug causing keyboard input loss by eliminating Z-order thrashing; `SetWindowPos` and `SHAppBarMessage` are now strictly bypassed if the widget's physical pixel coordinates haven't changed.
@@ -202,7 +204,6 @@ NIC throughput sensor paths contain a GUID that differs per machine. Discovery e
 - Fixed Settings window memory leaks by binding context cleanup directly to the `WM_DESTROY` lifecycle.
 
 ### 1.1.3
-
 **Features**
 - Runtime sensor discovery — no hardcoded sensor indices; works across LHM versions and hardware vendors
 - 13 configurable parameters: CPU (Load, Temp, Clock, Power), RAM (Load, Used GB, Temp), GPU (Load, Temp, Memory, Power), Network (Up+Down), Disk (Read+Write)
