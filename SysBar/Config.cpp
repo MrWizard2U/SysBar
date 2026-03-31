@@ -6,22 +6,12 @@
 #pragma comment(lib,"ole32.lib")
 #pragma comment(lib,"user32.lib")
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Virtual NIC exclusion fragments
-// ─────────────────────────────────────────────────────────────────────────────
 const wchar_t* const VIRTUAL_NIC_FRAGMENTS[] = {
     L"loopback", L"virtual", L"hyper-v", L"vmware", L"vethernet",
     L"bluetooth", L"tunnel",  L"isatap",  L"teredo", L"6to4"
 };
-const int VIRTUAL_NIC_FRAGMENT_COUNT =
-(int)(sizeof(VIRTUAL_NIC_FRAGMENTS) / sizeof(VIRTUAL_NIC_FRAGMENTS[0]));
+const int VIRTUAL_NIC_FRAGMENT_COUNT = (int)(sizeof(VIRTUAL_NIC_FRAGMENTS) / sizeof(VIRTUAL_NIC_FRAGMENTS[0]));
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Parameter metadata table
-// label      = max 3 chars shown in widget
-// menuLabel  = full description + [label] shown in Settings
-// isFixedPair= occupies one full column (Up+Dn / R+W)
-// ─────────────────────────────────────────────────────────────────────────────
 const ParamDesc PARAMS[P_COUNT] =
 {
     { L"CPU", L"CPU Load %          [CPU]", false },
@@ -30,18 +20,15 @@ const ParamDesc PARAMS[P_COUNT] =
     { L"CPW", L"CPU Power (W)[CPW]", false },
     { L"RAM", L"RAM Load %          [RAM]", false },
     { L"RmG", L"RAM Used GB         [RmG]", false },
-    { L"RmT", L"RAM Temp \u00B0C         [RmT]", false },
+    { L"RmT", L"RAM Temp \u00B0C[RmT]", false },
     { L"GL",  L"GPU Load %          [GL ]", false },
     { L"GT",  L"GPU Temp \u00B0C         [GT ]", false },
-    { L"GM",  L"GPU Memory MB       [GM ]", false },
+    { L"GM",  L"GPU Memory MB[GM ]", false },
     { L"GW",  L"GPU Power (W)       [GW ]", false },
-    { L"Dsk", L"Disk Read+Write  [DkR / DkW]", true  },
+    { L"Dsk", L"Disk Read+Write[DkR / DkW]", true  },
     { L"Net", L"Network Up+Down   [Up  / Dn ]", true  },
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
 static std::wstring NarrowToWide(const std::string& s)
 {
     if (s.empty()) return {};
@@ -64,26 +51,18 @@ static std::string WideToNarrow(const wchar_t* w)
     return s;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// INI path
-// ─────────────────────────────────────────────────────────────────────────────
 std::wstring GetIniPath()
 {
     wchar_t* localAppData = nullptr;
-    if (SUCCEEDED(SHGetKnownFolderPath(
-        FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &localAppData)))
+    if (SUCCEEDED(SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, nullptr, &localAppData)))
     {
         std::wstring path = localAppData;
         CoTaskMemFree(localAppData);
-
         path += L"\\TaskbarWidget";
-        CreateDirectoryW(path.c_str(), nullptr); // no-op if already exists
-
+        CreateDirectoryW(path.c_str(), nullptr);
         path += L"\\TaskbarWidget.ini";
         return path;
     }
-
-    // Fallback: next to the .exe (non-MSIX, or if LOCALAPPDATA unavailable)
     wchar_t path[MAX_PATH]{};
     GetModuleFileNameW(nullptr, path, MAX_PATH);
     std::wstring wpath = path;
@@ -93,9 +72,6 @@ std::wstring GetIniPath()
     return wpath;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Save
-// ─────────────────────────────────────────────────────────────────────────────
 void SaveConfig(State* s)
 {
     const std::wstring& p = s->iniPath;
@@ -103,34 +79,44 @@ void SaveConfig(State* s)
     wchar_t buf[32];
     swprintf_s(buf, L"%d", s->cfg.lhmPort);
     WritePrivateProfileStringW(L"Settings", L"Port", buf, p.c_str());
+    WritePrivateProfileStringW(L"Settings", L"AutoStart", s->cfg.autoStart ? L"1" : L"0", p.c_str());
 
     for (int i = 0; i < P_COUNT; ++i)
     {
         wchar_t key[32];
         swprintf_s(key, L"Param%d", i);
-        WritePrivateProfileStringW(L"Params", key,
-            s->cfg.enabled[i] ? L"1" : L"0", p.c_str());
+        WritePrivateProfileStringW(L"Params", key, s->cfg.enabled[i] ? L"1" : L"0", p.c_str());
     }
 
-    WritePrivateProfileStringW(L"Devices", L"GPU",
-        NarrowToWide(s->cfg.gpuPath).c_str(), p.c_str());
-    WritePrivateProfileStringW(L"Devices", L"Disk",
-        NarrowToWide(s->cfg.diskPath).c_str(), p.c_str());
-    WritePrivateProfileStringW(L"Devices", L"NICs",
-        NarrowToWide(s->cfg.nicPaths).c_str(), p.c_str());
+    WritePrivateProfileStringW(L"Devices", L"GPU", NarrowToWide(s->cfg.gpuPath).c_str(), p.c_str());
+    WritePrivateProfileStringW(L"Devices", L"Disk", NarrowToWide(s->cfg.diskPath).c_str(), p.c_str());
+    WritePrivateProfileStringW(L"Devices", L"NICs", NarrowToWide(s->cfg.nicPaths).c_str(), p.c_str());
+
+    // Write AutoStart to Windows Registry with the delay flag
+    HKEY hKey;
+    if (RegCreateKeyExW(HKEY_CURRENT_USER, L"Software\\Microsoft\\Windows\\CurrentVersion\\Run", 0, nullptr, 0, KEY_WRITE, nullptr, &hKey, nullptr) == ERROR_SUCCESS)
+    {
+        if (s->cfg.autoStart) {
+            wchar_t exePath[MAX_PATH];
+            GetModuleFileNameW(nullptr, exePath, MAX_PATH);
+            std::wstring runCmd = std::wstring(L"\"") + exePath + L"\" --autostart";
+            DWORD dataSize = static_cast<DWORD>((runCmd.length() + 1) * sizeof(wchar_t));
+            RegSetValueExW(hKey, L"SysBar", 0, REG_SZ, reinterpret_cast<const BYTE*>(runCmd.c_str()), dataSize);
+        } else {
+            RegDeleteValueW(hKey, L"SysBar");
+        }
+        RegCloseKey(hKey);
+    }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Load
-// ─────────────────────────────────────────────────────────────────────────────
 void LoadConfig(State* s)
 {
     const std::wstring& p = s->iniPath;
 
-    s->cfg.lhmPort = (int)GetPrivateProfileIntW(
-        L"Settings", L"Port", DEFAULT_PORT, p.c_str());
-    if (s->cfg.lhmPort <= 0 || s->cfg.lhmPort > 65535)
-        s->cfg.lhmPort = DEFAULT_PORT;
+    s->cfg.lhmPort = (int)GetPrivateProfileIntW(L"Settings", L"Port", DEFAULT_PORT, p.c_str());
+    if (s->cfg.lhmPort <= 0 || s->cfg.lhmPort > 65535) s->cfg.lhmPort = DEFAULT_PORT;
+
+    s->cfg.autoStart = GetPrivateProfileIntW(L"Settings", L"AutoStart", 0, p.c_str()) != 0;
 
     Config def;
     for (int i = 0; i < P_COUNT; ++i)
@@ -138,8 +124,7 @@ void LoadConfig(State* s)
         wchar_t key[32];
         swprintf_s(key, L"Param%d", i);
         int defVal = def.enabled[i] ? 1 : 0;
-        s->cfg.enabled[i] =
-            GetPrivateProfileIntW(L"Params", key, defVal, p.c_str()) != 0;
+        s->cfg.enabled[i] = GetPrivateProfileIntW(L"Params", key, defVal, p.c_str()) != 0;
     }
 
     wchar_t wbuf[512]{};
@@ -149,7 +134,6 @@ void LoadConfig(State* s)
     GetPrivateProfileStringW(L"Devices", L"Disk", L"", wbuf, 512, p.c_str());
     s->cfg.diskPath = WideToNarrow(wbuf);
 
-    // Generous buffer for network adapters since they stack semicolon separated
     wchar_t wbufNics[2048]{};
     GetPrivateProfileStringW(L"Devices", L"NICs", L"", wbufNics, 2048, p.c_str());
     s->cfg.nicPaths = WideToNarrow(wbufNics);

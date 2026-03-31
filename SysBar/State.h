@@ -24,73 +24,52 @@
 
 using Microsoft::WRL::ComPtr;
 
-// ─────────────────────────────────────────────────────────────────────────────
-// AppBar registration state
-// ─────────────────────────────────────────────────────────────────────────────
 struct AppBarState
 {
     APPBARDATA abd{};
     bool       registered = false;
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Full application state — passed by pointer to all modules
-// ─────────────────────────────────────────────────────────────────────────────
 struct State
 {
-    // Window handles
-    HWND hwnd{};  // main widget window
-    HWND hwndSettings{};  // Settings dialog (in-app popup)
-    HWND hwndAbout{};  // About & Attribution dialog (in-app popup)
-    // User Guide, License and Tech Support open in the system browser —
-    // no HWND tracking needed for those.
+    HWND hwnd{};
+    HWND hwndSettings{};
+    HWND hwndAbout{};
 
-    // Widget geometry (pixels)
     int widgetH{};
     int widgetW{};
 
-    // Shell integration
     AppBarState  appbar;
-    UINT         wmTaskbarCreated{};  // RegisterWindowMessage result
+    UINT         wmTaskbarCreated{};
 
-    // Menu safety flag to prevent background repositioning from deadlocking input
     std::atomic<bool> isMenuOpen{ false };
+    bool isVisible = true; // Tracks startup delay visibility
 
-    // Configuration (loaded from .ini, modified via Settings dialog)
     Config       cfg;
     std::wstring iniPath;
 
-    // Discovered sensor ID map — populated by DiscoverSensors() in Sensor.cpp
-    // Protected by dataMutex. Re-discovered periodically.
     SensorMap sensorMap;
 
-    // Live sensor values indexed by ParamId; protected by dataMutex
     double       values[P_COUNT] = {};
-    bool         sensorFound[P_COUNT] = {};  // true = LHM reported this sensor
+    bool         sensorFound[P_COUNT] = {};
     bool         dataValid = false;
 
-    // Extra values for fixed-pair params (Net Down, Disk Write)
-    // stored separately since they share a ParamId slot with their pair
     double netDown = 0; bool netDownFound = false;
     double diskWrite = 0; bool diskWriteFound = false;
 
     std::mutex   dataMutex;
 
-    // Device lists discovered from LHM JSON; protected by deviceMutex
     std::vector<DeviceInfo> gpuList;
     std::vector<DeviceInfo> diskList;
-    std::vector<DeviceInfo> nicList;  // non-virtual only
+    std::vector<DeviceInfo> nicList;
     std::mutex              deviceMutex;
     bool                    devicesReady = false;
 
-    // Sensor thread control
     std::atomic<bool> running{ true };
     std::atomic<bool> drawPending{ false };
 
-    // Win32 / HINSTANCE
     HINSTANCE hInst{};
 
-    // DirectX / DirectComposition resources
     ComPtr<ID3D11Device>         d3d;
     ComPtr<IDXGIDevice>          dxgi;
     ComPtr<IDCompositionDevice>  dcomp;
