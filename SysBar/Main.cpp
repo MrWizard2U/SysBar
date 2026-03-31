@@ -16,6 +16,7 @@
 #include "Sensor.h"
 #include "SettingsDlg.h"
 #include "HelpDlg.h"
+#include "ThemeUtil.h"
 
 #pragma comment(lib,"user32.lib")
 #pragma comment(lib,"gdi32.lib")
@@ -34,11 +35,11 @@ static HANDLE g_singleInstMutex = nullptr;
 
 #define IDM_SETTINGS      1001
 #define IDM_EXIT          1003
-#define IDM_ABOUT         1004  // About + Attribution combined popup
-#define IDM_LICENSE       1005  // opens browser
-#define IDM_DONATE        1007  // opens browser
-#define IDM_SUPPORT       1008  // opens browser (mailto)
-#define IDM_INSTRUCTIONS  1009  // opens browser
+#define IDM_ABOUT         1004
+#define IDM_LICENSE       1005
+#define IDM_DONATE        1007
+#define IDM_SUPPORT       1008
+#define IDM_INSTRUCTIONS  1009
 
 static LRESULT CALLBACK WndProc(HWND h, UINT m, WPARAM w, LPARAM l)
 {
@@ -84,6 +85,16 @@ static LRESULT CALLBACK WndProc(HWND h, UINT m, WPARAM w, LPARAM l)
         return 0;
     }
 
+    case WM_TIMER: // 5-Second Delay trigger
+        if (w == 1) {
+            KillTimer(h, 1);
+            s->isVisible = true;
+            RepositionWidget(s);
+            ShowWindow(h, SW_SHOWNA); // Show safely without stealing keyboard focus
+            return 0;
+        }
+        break;
+
     case WM_USER + 1:
         if (!s->isMenuOpen) RepositionWidget(s);
         return 0;
@@ -111,6 +122,10 @@ static LRESULT CALLBACK WndProc(HWND h, UINT m, WPARAM w, LPARAM l)
 
     case WM_ERASEBKGND:
         return 1;
+
+    case WM_LBUTTONUP: // Left click opens Task Manager natively
+        ShellExecuteW(nullptr, L"open", L"taskmgr.exe", nullptr, nullptr, SW_SHOWNORMAL);
+        return 0;
 
     case WM_CONTEXTMENU:
     {
@@ -153,9 +168,6 @@ static LRESULT CALLBACK WndProc(HWND h, UINT m, WPARAM w, LPARAM l)
         case ABE_RIGHT:           flags |= TPM_RIGHTALIGN;  sx = wr.left;   break;
         }
 
-        // We explicitly tell Windows to bring our context menu process to the foreground 
-        // so it tracks properly, but we NO LONGER manipulate GWLP_HWNDPARENT here.
-        // Manipulating parentage dynamically is what causes the input queue to drop keystrokes into a black hole.
         SetForegroundWindow(h);
         int cmd = TrackPopupMenu(menu, flags, sx, sy, 0, h, nullptr);
         PostMessageW(h, WM_NULL, 0, 0);
@@ -189,8 +201,17 @@ static LRESULT CALLBACK WndProc(HWND h, UINT m, WPARAM w, LPARAM l)
 
 int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ int)
 {
+    InitAppTheme(); // Enables dark mode for standard context menus
+
     State* s = &g_state;
     s->hInst = hInst;
+
+    // Determine if launched by AutoStart
+    if (wcsstr(GetCommandLineW(), L"--autostart") != nullptr) {
+        s->isVisible = false;
+    } else {
+        s->isVisible = true;
+    }
 
     {
         INITCOMMONCONTROLSEX icex{ sizeof(icex), ICC_LINK_CLASS };
@@ -217,18 +238,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ i
     LoadConfig(s);
 
     HWND tray = FindWindowW(L"Shell_TrayWnd", nullptr);
+    if (!tray) return 1;
+
     HWND notify = FindWindowExW(tray, nullptr, L"TrayNotifyWnd", nullptr);
-    if (!tray || !notify) return 1;
 
     RECT tr{}, nr{};
     GetWindowRect(tray, &tr);
-    GetWindowRect(notify, &nr);
+    if (notify) GetWindowRect(notify, &nr);
 
     s->widgetH = tr.bottom - tr.top;
     if (s->widgetH <= 0) s->widgetH = 40;
     s->widgetW = ComputeWidgetWidth(s);
 
-    int startX = nr.left - s->widgetW;
+    int startX = notify ? (nr.left - s->widgetW) : (tr.right - s->widgetW);
     if (startX < tr.left) startX = tr.left;
 
     WNDCLASSEXW wc{};
@@ -240,22 +262,20 @@ int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ i
     wc.hbrBackground = nullptr;
     RegisterClassExW(&wc);
 
-    // Assert WS_EX_TOPMOST at creation so it doesn't need to be 
-    // dynamically asserted by the background drift guard.
+    // Conditionally apply WS_VISIBLE based on autostart parameter
     s->hwnd = CreateWindowExW(
-        WS_EX_TOOLWINDOW |
-        WS_EX_NOACTIVATE |
-        WS_EX_NOREDIRECTIONBITMAP |
-        WS_EX_TOPMOST,
-        WC_WIDGET, L"",
-        WS_POPUP | WS_VISIBLE,
-        startX, tr.top,
-        s->widgetW, s->widgetH,
-        nullptr, nullptr, hInst, nullptr);
+        WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_NOREDIRECTIONBITMAP | WS_EX_TOPMOST,
+        WC_WIDGET, L"", 
+        WS_POPUP | (s->isVisible ? WS_VISIBLE : 0), 
+        startX, tr.top, s->widgetW, s->widgetH, nullptr, nullptr, hInst, nullptr);
 
     if (!s->hwnd) return 1;
-
     if (tray) SetWindowLongPtrW(s->hwnd, GWLP_HWNDPARENT, (LONG_PTR)tray);
+
+    // Initiate 5 second delay timer if launched from startup
+    if (!s->isVisible) {
+        SetTimer(s->hwnd, 1, 5000, nullptr);
+    }
 
     AppBarRegister(s);
     if (!InitDComp(s))
@@ -270,8 +290,6 @@ int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE, _In_ PWSTR, _In_ i
 
     std::thread sensorThread(SensorThreadProc, s, g_shutdownEvent);
 
-    // FIX: Cleaned up thread message loop to prevent redundant broadcast intercepts 
-    // that were bleeding across into child windows.
     MSG msg{};
     while (GetMessageW(&msg, nullptr, 0, 0))
     {
