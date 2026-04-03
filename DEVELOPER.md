@@ -1,7 +1,7 @@
 # SysBar — Developer Documentation
 
 **Author:** Mutant Wizard  
-**Version:** 1.2.0  
+**Version:** 1.2.1  
 **Platform:** Windows 10 1809+ x64  
 **Stack:** Win32 + DirectComposition + D2D1.1 + DWrite + D3D11  
 
@@ -160,7 +160,19 @@ On first poll (and every 60 seconds), `DiscoverSensors()` inspects the parsed ha
 
 ## Changelog
 
-### 1.2.0 — Current release
+### 1.2.1 — Current release
+**Features & UX Improvements**
+- Standardized Context Menu: Completely redesigned the right-click menu to match the new unified layout used across the Mutant Wizard app ecosystem.
+- Native Menu Icons: Implemented a strict, pixel-perfect two-column menu layout. The menu now features custom-generated, 32-bpp transparent icons (converted from Segoe UI Emojis) seamlessly embedded via native Win32 HBITMAP rendering.
+- New Help Flyout: Reorganized the menu by moving secondary links into a native Windows "Help" flyout submenu, keeping the primary interface clean.
+- New Links: Added "Go Pro" and "Explore More Apps" to easily route users to the Microsoft Store and the developer homepage.
+
+**Bug Fixes**
+- Resource Compiler Fixes: Resolved a long-standing compatibility issue between modern high-resolution (PNG-compressed) .ico files and the Visual Studio Resource Compiler (rc.exe).
+- Build Pipeline Optimization: Updated the icon-generation Python script to output strictly compatible 16x16 to 64x64 layers for the internal .exe payload, while isolating the 256x256 asset for the MSIX Store packaging.
+- Resource Cleanup: Purged dead .png blob artifacts from SysBar.rc and hard-linked the resources using absolute paths for a guaranteed, warning-free build.
+
+### 1.2.0
 **Features**
 - Native Light/Dark Mode Support: Implemented `dwmapi` and `uxtheme` wrappers to dynamically apply Windows Dark Mode to all context menus, dialog backgrounds, and comboboxes.
 - Dynamic Theme Awareness: The widget text automatically queries the Windows Registry (`SystemUsesLightTheme`) every frame and swaps between white and black text depending on the user's taskbar color.
