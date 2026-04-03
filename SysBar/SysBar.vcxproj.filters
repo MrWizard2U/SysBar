@@ -69,36 +69,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\Icons\icons\IDI_ABOUT.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_DONATE.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_EXIT.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_GOPRO.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_HELP.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_LICENSE.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_MOREAPPS.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_SETTINGS.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_SUPPORT.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\..\Icons\icons\IDI_USERGUIDE.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="..\..\Icons\icons\settings.ico">
       <Filter>Resource Files</Filter>
     </Image>
