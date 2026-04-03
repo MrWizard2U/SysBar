@@ -126,7 +126,7 @@ void ShowAboutDialog(State* s)
     s->hwndAbout = CreateWindowExW(WS_EX_DLGMODALFRAME | WS_EX_TOOLWINDOW, WC_ABOUT, L"SysBar \u2014 About & Attribution", WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, nullptr, nullptr, s->hInst, nullptr);
 }
 
-void OpenUserGuide() { wchar_t url[256]; wcscpy_s(url, SITE_BASE); wcscat_s(url, L"/sysbar-guide.html"); ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL); }
+void OpenUserGuide() { wchar_t url[256]; wcscpy_s(url, SITE_BASE); wcscat_s(url, L"/sysbar/sysbar-guide.html"); ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL); }
 void OpenLicense() { wchar_t url[256]; wcscpy_s(url, SITE_BASE); wcscat_s(url, L"/license.html"); ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL); }
-void OpenTechSupport() { ShellExecuteW(nullptr, L"open", L"mailto:sendtowizzard@gmail.com?subject=SysBar%20Tech%20Support", nullptr, nullptr, SW_SHOWNORMAL); }
+void OpenTechSupport() { wchar_t url[256]; wcscpy_s(url, SITE_BASE); wcscat_s(url, L"/tech-support.html"); ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL); }
 void OpenDonationPage() { wchar_t url[256]; wcscpy_s(url, SITE_BASE); wcscat_s(url, L"/donate.html"); ShellExecuteW(nullptr, L"open", url, nullptr, nullptr, SW_SHOWNORMAL); }

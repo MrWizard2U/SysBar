@@ -147,9 +147,26 @@
     <ClInclude Include="HelpDlg.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="SettingsDlg.h" />
     <ClInclude Include="State.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SysBar.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\Icons\icons\IDI_ABOUT.ico" />
+    <Image Include="..\..\Icons\icons\IDI_DONATE.ico" />
+    <Image Include="..\..\Icons\icons\IDI_EXIT.ico" />
+    <Image Include="..\..\Icons\icons\IDI_GOPRO.ico" />
+    <Image Include="..\..\Icons\icons\IDI_HELP.ico" />
+    <Image Include="..\..\Icons\icons\IDI_LICENSE.ico" />
+    <Image Include="..\..\Icons\icons\IDI_MOREAPPS.ico" />
+    <Image Include="..\..\Icons\icons\IDI_SETTINGS.ico" />
+    <Image Include="..\..\Icons\icons\settings.ico" />
+    <Image Include="..\..\Icons\icons\IDI_SUPPORT.ico" />
+    <Image Include="..\..\Icons\icons\IDI_USERGUIDE.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

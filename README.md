@@ -1,4 +1,5 @@
-# SysBar — Real-Time Hardware Monitor for Windows
+# SysBar — Hardware Monitor for Windows 
+**By [Mutant Wizard](https://mrwizard2u.github.io/)**<br><br><br>
 
 **Live CPU, GPU, RAM, Network and Disk stats — right on your Windows taskbar.**
 
@@ -8,15 +9,15 @@ SysBar is a lightweight, transparent taskbar widget that displays real-time hard
 
 **Widget**
 
-![SysBar Widget Preview](preview/sysbar_sysbar.png)
+![SysBar Widget Preview](preview/sysbar_sysbar.png)<br><br>
 
 **Menu**
 
-![SysBar Widget Preview](preview/sysbar_menu.png)
+![SysBar Widget Preview](preview/sysbar_menu.png)<br><br>
 
 **Settings**
 
-![SysBar Widget Preview](preview/sysbar_settings.png)
+![SysBar Widget Preview](preview/sysbar_settings.png)<br><br>
 
 ---
 
